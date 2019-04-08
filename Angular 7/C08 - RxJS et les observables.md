@@ -264,7 +264,7 @@ Vous pouvez tester ce fonctionnement en ajoutant cette condition au filtre :
 Vous verrez que l'itération 11 ne se produira jamais même si vous attendez éternellement sans cliquer sur le DOM.
 
 
-#### Promosse ou observable
+#### Promesse ou observable
 
 Vous allez régulièrement vous demander si vous devez utiliser une promesse avec l'objet Promise ou un Observable lorsque vous souhaiterez traiter des données de façon asynchrone, notamment lors de requêtes HTTP.
 Alors que choisir et comment ?
