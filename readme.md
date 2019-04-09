@@ -2,11 +2,15 @@
 
 Dans ce repository vous retrouverez un ensemble de cours liés au développement web. Ces cours sont en français.<br>
 
-**Pourquoi proposer des cours ?**<br>
+**Pourquoi proposer des cours ?** <br>
 
-Je crois que la meilleures de façon d'apprendre est d'être capable de retransmettre ainsi j'ai choisi d'apprendre en essayant de créer mes propres cours alors pourquoi ne pas les partager ?
-Autre chose lorsque vous commencez à vous renseigner et à vouloir vous éduquer sur différentes technologies vous allez rapidement vous retrouver avec une documentation anglosaxone qu'il faudra traduire. Pour ceux qui ne maîtrisent pas encore totalement l'anglais ces cours pourraient être pratiques même s'il est absolument necessaire de maîtriser la langue. Une autre problèmatique est l'age du cours en question, en effet parfois la version du cours traduite est obselète et vous devez sans arrêt faire des allez-retour entre la doc officielle et le cours que vous suivez, j'ai donc utilisé certains cours et les ai mis à jour. <br>
+Je crois que la meilleure façon d'apprendre est d'être capable de retransmettre, ainsi, j'ai choisi d'apprendre en essayant de créer mes propres cours alors pourquoi ne pas vous les partager ?
+Autre chose, lorsque vous commencez à vous renseigner et à vouloir vous éduquer sur différentes technologies vous allez rapidement vous retrouver avec une documentation anglosaxone qu'il faudra traduire. Pour ceux qui ne maîtrisent pas encore totalement l'anglais ces cours pourraient être pratiques temporairement, car est absolument nécessaire de maîtriser cette langue dans ce formidable métier. Une autre problèmatique est l'age du cours en question, en effet parfois la version du cours traduite est obselète et vous devez sans arrêt faire des allez-retours entre la doc officielle et le cours que vous suivez. J'ai donc utilisé certains cours et les ai mis à jour. <br>
 Vous retrouverez l'ensemble des sources pour chacun des cours ci-dessous.
+
+**Notes** <br>
+
+Pour les fans de français je n'ai pas encore fait la correction de l'ensemble des cours il doit y avoir pas mal de fautes d'innatention comme des oublis de s au pluriel ou encore des accords non respectés. N'hésitez pas à ouvrir un issue avec le cours corrigé si vous souhaitez participer à l'aventure =)
 
 
 Cours								|	Type			| Lien								|		Date		|		Sources		|
