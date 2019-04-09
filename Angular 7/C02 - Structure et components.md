@@ -1,4 +1,4 @@
-# CHAPITRE II : STRUCTURER LES COMPONENTS
+# CHAPITRE II : STRUCTURE ET COMPONENTS
 
 
 ## Qu'est-ce que les components ?
