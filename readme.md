@@ -10,7 +10,7 @@ Vous retrouverez l'ensemble des sources pour chacun des cours ci-dessous.
 
 **Notes** <br>
 
-Pour les fans de français je n'ai pas encore fait la correction de l'ensemble des cours il doit y avoir pas mal de fautes d'innatention comme des oublis de s au pluriel ou encore des accords non respectés. N'hésitez pas à ouvrir un issue avec le cours corrigé si vous souhaitez participer à l'aventure =)
+Pour les fans de français je n'ai pas encore fait la correction de l'ensemble des cours il doit y avoir pas mal de fautes d'inatention comme des oublis de s au pluriel ou encore des accords non respectés. N'hésitez pas à ouvrir un issue avec le cours corrigé si vous souhaitez participer à l'aventure =)
 
 
 Cours								|	Type			| Lien								|		Date		|		Sources		|
