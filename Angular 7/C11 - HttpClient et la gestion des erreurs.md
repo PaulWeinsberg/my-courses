@@ -100,7 +100,6 @@ RxJS dispose d'un opérateur permettant de réitérer une action dans le cas ou 
 			retry(3)
 		)
 		.subscribe(observer);
-	}
 ```
 
 Pensez bien à importer l'opérateur `retry` depuis `rxjs/operators`.
@@ -136,7 +135,7 @@ Puis notre méthode `getDevicesState` :
 		}
 
 		let request = this.HttpClient
-		.get('https://learning-app-2320e.firebaseio.com/devices.jon')
+		.get('https://learning-app-2320e.firebaseio.com/devices.nuts')
 		.pipe(
 			retry(3),
 			catchError(this.handleError)
@@ -149,4 +148,4 @@ Vous noterez la disparittion du gestionnaire d'erreur dans l'observer. Maintenan
 
 ## Conclusion
 
-Il est partioculièrement important de prévoir les erreur notamment quanc cela concerne les requêtes HTTP car celles-ci sont communes et peuvent parfois causer des erreurs complexes à résoudre surtout lorsque l'on manque d'informations sur leurs causes. Ainsi vous savez maintenant comment gérer les différents erreurs que vous rencontrerez. Sachez également que bon nombre d'erreurs sont gérables de façon similaire avec les observable alors restez précautionneux et attentifs.
+Il est particulièrement important de prévoir les erreur notamment quanc cela concerne les requêtes HTTP car celles-ci sont communes et peuvent parfois causer des erreurs complexes à résoudre surtout lorsque l'on manque d'informations sur leurs causes. Ainsi vous savez maintenant comment gérer les différents erreurs que vous rencontrerez. Sachez également que bon nombre d'erreurs sont gérables de façon similaire avec les observable alors restez précautionneux et attentifs.
