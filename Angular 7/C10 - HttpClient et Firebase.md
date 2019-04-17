@@ -10,7 +10,7 @@ Pour nous aider nous allons utiliser un service de Google appelé Firebase. Fire
 #### Pourquoi utiliser ce service ?
 
 Il y a plusieurs raison à ça, les bases de données non relationnelles sont très performantes et fonctionnent particulièrement bien pour les applications utilisants un format type JSON. D'autre part Firebase est un service Google et Angular en est un frameworks. Les ingénieurs de Google ont donc tout intérêts à faciliter l'utilisation des deux parties aux sein d'un même projet et ainsi faciliter la vie du développeur.
-Il est bien sur possible d'utiliser Angular avec une BDD relationnelle SQL ou tout autre système mais ici je vous propose d'utiliser et de survoler Firebase. De plus ce service est gratuit en dessous d'un certain volume d'échange et de stockage ce qui est très pratiqiue dans notre cas.
+Il est bien sur possible d'utiliser Angular avec une BDD relationnelle SQL ou tout autre système mais ici je vous propose d'utiliser et de survoler Firebase. De plus ce service est gratuit en dessous d'un certain volume d'échange et de stockage ce qui est très pratique dans notre cas.
 
 ## Création d'une BDD avec Firebase
 
@@ -411,6 +411,51 @@ Puis lors de l'initialisation de notre component nous allons appeller la méthod
 
 Voyons maintenant si nous service fonctionne. It's works !!!
 Les `Subject` sont des observables réellement indispensables au bont fonctionnement d'une application et notamment lors de la communication entre un service et un component.
+
+#### Ajouter un header à notre requête
+
+De nombreux services, notamment beaucoup d'API, demandent de compléter le header d'une requête avec des informations particulières. On retrouve souvent le format de fichier qui dans le cas d'un JSON peut être indiqué comme ceci : `content-type: application/json`. Je vous propose d'ajouter cette petite précision à notre méthode `sendDevicesState` dans notre service `DevicesService`.
+
+Pour ce faire nous allons devoir importer le module `HttpHeaders` depuis les modules d'Agular. Dans notre service :
+
+```typescript
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+```
+
+Il nous faudra par la suite créer un nouvel objet depuis ce module, étant donné que celui-ci pourrait nous servir dans plusieurs requêtes par la suite je vous propose de créer cette objet directement dans les propriétés de notre classe du service. Ce nouvel objet prend en paramètre un second objet qui contiendra une propriété appelée `headers` qui elle même contiendra un objet faisant référence aux différentes instructions devant figurer dans notre requête. Pour être plus cair voici ce que cela donne avec ce que nous avons décidé d'implémenter :
+
+```typescript
+	httpSendOptions = {
+		headers: new HttpHeaders({
+			'Content-Type': 'application/json'
+		})
+	}
+```
+
+Maintenant que nous avons défini ce que nous souhaitions dans notre header et plus précisement dans la propriété `httpSendOptions` de notre classe de service, nous allons l'implémenter à la méthode `sendDevicesState`. Pour cela rien de bien complexe il nous suffit de l'indiquer en troisième paramètre de notre méthode `put` ce qui donne ceci :
+
+```typescript
+	sendDevicesState():void {
+		const observer = {
+			next: () => {
+				observer.complete();
+				this.emitDevicesSubject();
+			},
+			error: (error) => {
+				console.error('An error has occured ' + error);
+			},
+			complete: () => {
+				request.unsubscribe();
+			}
+		}
+
+		const request = this.HttpClient
+		.put('https://learning-app-2320e.firebaseio.com/devices.json', this.devices, this.httpSendOptions)
+		.subscribe(observer);
+	}
+```
+
+Si vous testez votre application vous pourrez constater que rien ne change, c'est normal car firebase n'a pas besoin de cette précision lorsque le fichier se termine par `.json`. Quoi qu'il en soit vous savez maintenant comment ajouter une ou plusieurs informations dans le header de votre requête.
 
 ## Conclusion
 
