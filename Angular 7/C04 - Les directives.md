@@ -232,6 +232,73 @@ export class GetFocusDirective {
 
 }
 ```
-Nous avons maitenant deux méthodes, la première définies une bordure et passe par l'élément style sur notre élément du DOM la seconde supprime simplement cet attribut et donc la couleur précédemment appliquée. On peut voir en haut de notre classe nos deux décourateur faisant chacun appel à des méthodes appelant les précédentes. Allez voir votre page et vous constaterez que l'ensemble fonctionne parfaitement =).
+Nous avons maitenant deux méthodes, la première définies une bordure et passe par l'élément style sur notre élément du DOM la seconde supprime simplement cet attribut et donc la couleur précédemment appliquée. On peut voir en haut de notre classe nos deux décorateurs faisant chacun appel à des méthodes appelant les précédentes. Allez voir votre page et vous constaterez que l'ensemble fonctionne parfaitement =).
 
-Vous savez maintenant créer vos propres directives.
+
+#### Ajouter un paramètre
+
+Il est également possible d'ajouter un paramètre à notre directive grâce au décorateur `@input()` que nous pouvons inclure directement dans la classe de celle-ci. Ce décorateur prend en paramètre la directive à laquelle il est associé puis doit être suivi d'un alias permettant d'utiliser le paramètre de la directive. Voici dont notre classe avec un alias que nous appellerons `colorRef`. 'oubliez pas l'importer depuis `@angular/core`.
+
+```TypeScript
+export class GetFocusDirective {
+
+	constructor(private element: ElementRef) { }
+
+	@Input('getFocus') colorRef: string;
+
+	@HostListener('mouseenter')
+	onMouseEnter() {
+		this.changeColor(this.colorRef)
+	}
+
+	@HostListener('mouseleave')
+	onMouseleave() {
+		this.removeColor();
+	}
+
+	changeColor(color: string) {
+		this.element.nativeElement.style.border = '1px solid ' + color;
+	}
+
+	removeColor() {
+		this.element.nativeElement.removeAttribute('style');
+	}
+
+}
+```
+
+Notre alias est maintenant une propriété de notre classe soit `this.colorRef` et notre décorateur `@HostListener('mouseenter')` l'utilisera en paramètre de la fonction `changeColor`. Pour voir si notre directive fonctionne toujours comme nous le souhaitons nous pouvons modifier notre template HTML de notre component `devices` comme ceci :
+
+```html
+      <li getFocus="blue" *ngFor="let devicesName of devicesObject.devicesName; let i=index" [ngClass]="{'list-group-item': true,
+                                                                                        'list-group-item-success': devicesObject.devicesStatus[i] === 'Allumé',
+                                                                                        'list-group-item-danger': devicesObject.devicesStatus[i] === 'Eteint',
+                                                                                        'list-group-item-warning': devicesObject.devicesStatus[i] === 'Veille'}">
+        Appareil : {{ devicesName }} -- Status : {{ devicesObject.devicesStatus[i] }}
+      </li>
+```
+
+Tout fonctionne mais rendons le code un peu plus fonctionnel et plus dynamique. Je vous propose de définir la couleur des bordures en fonction du status de chacun de nos devices. Pour cela nous allons créer une méthode directement dans la classe de notre component elle prendra en paramètre le status du device :
+
+```typescript
+	getColor(deviceStatus) {
+		if (deviceStatus === 'Allumé') {
+			return 'var(--success)'
+		} else {
+			return 'var(--danger)'
+		}
+	}
+```
+
+Maintenant que nous avons notre méthode il nous suffit de nous servir de l'index transmit par la directive `*ngFor`, comme nous l'avons fait précédemment pour nos différentes classes. Mais dans le cas de notre directive nous nous servirons d'une string interpolation pour écécuter notre méthode qui renverra une variable CSS de Bootstrap. Voici ce que cela donne dans notre template HTML :
+
+```html
+      <li getFocus="{{ getColor(devicesObject.devicesStatus[i]) }}" *ngFor="let devicesName of devicesObject.devicesName; let i=index" [ngClass]="{'list-group-item': true,
+                                                                                        'list-group-item-success': devicesObject.devicesStatus[i] === 'Allumé',
+                                                                                        'list-group-item-danger': devicesObject.devicesStatus[i] === 'Eteint',
+                                                                                        'list-group-item-warning': devicesObject.devicesStatus[i] === 'Veille'}">
+        Appareil : {{ devicesName }} -- Status : {{ devicesObject.devicesStatus[i] }}
+      </li>
+```
+
+Voilà qui est beaucoup mieux ! Biensûr le code n'est pas vraiment optimisé mais vous découvrirez dans la suite de ce cours comment mieux l'organiser. Quoi qu'il en soit vous savez maintenant créer et rendre dynamique vos directives personnalisées ! 
