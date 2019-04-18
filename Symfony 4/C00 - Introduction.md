@@ -79,3 +79,31 @@ Nous avons maintenant l'ensemble des dépendances absolument nécessaires au fon
 
 
 ## Installation de Symfony
+
+Chez Symfony on est cool et les développeur nous on concocté un *petit* squelette de site web utilisant Symfony pour démarrer rapidemet un nouveau projet. Et devinez quoi ? Une ligne de commande et c'est réglé =). Enfin j'exagère un petit peu mais c'est presque ça. Alors dans notre terminal nous allons installer ce squelette dans un nouveau projet avec l'outil composer qui se chargera du téléchargement et de l'installation de l'ensemble, nous nommerons ce projet `website` parce que nous ne sommes pas là pour la créativité :
+
+`composer create-project symfony/skeleton-website website`
+
+Et voilà que composer ce charge du boulot. 
+
+#### Un serveur simple et efficace
+
+Maintenant que nous avvons notre squelette Symfony je vous propose d'installer un serveur un peu différent de ce que vous avez utilisé jusqu'a présent si vous avez déjà utiliser un serveur Apache. Mais alors pourquoi l'avoir installé ? Et bien vous verrez pourquoi à la fin du cours en attendant nous allons nous faciliter la vie.
+
+Pour installer ce fameux serveur à partir de votre terminal il vous suffit d'utiliser la commande suivant :
+
+`composer require server --dev`
+
+Le flag en fin de ligne permet à composer de comprendre que cette dépendance n'est la que le temps du développement de notre application et donc nous pourrons nous en dispenser pour la mise en production ou déploiement.
+
+Un fois installer il vous duffira d'exécuter la commande suivante pour lancer votre serveur :
+
+`php ./bin/console server:run`
+
+Rendez-vous dans votre navigateur et taper l'adresse suivante `localhost:8000`. Attention à bien saisir le port 8000 et non 80 qui est le port par défaut. Ce serveur peut tourner en même temps qu'un serveur apache sur votre machine ce qui peut être assez pratique.
+
+
+#### Mauvaise version (autre que 4.X)
+
+Lorsque vous utiliserez ce tutoriel il est fort probable que la version de PHP stable soit au minimum la 7.2 pour Debian si ce n'est pas encore le cas comme pour moi au moment ou j'écris ce paragraph il vous faudra alors installer les dépendances de php7.2. Réinstallez ensuite composer qui installera les dépendances liées au packages de php7.2. En effet si vous utiliser composer avec une version PHP antérieur à la 7.2 alors celui-ci installera automatiquement une version de Symfony antérieure, dans mon cas la 3.4.
+
