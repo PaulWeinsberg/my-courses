@@ -88,7 +88,12 @@ $twig = new \Twig\Environment($loader, [
 ```
 Le second paramètre n'étant pas obligatoire j'ai choisi d'inscrire `false` pour que vous compreniez son fonctionnement. Si vous remplacez le booléen pas une chaine de caractère pointant vers un dossier alors celui-ci contiendra vos mise en cache, tout simplement. D'ailleur voici les options que vous pouvez renseigner :
 
-* `cache` : 
+* `cache` : Doit contenir une chemin sous forme de string vers le dossier contenant les fichiers de cache.
+* `debug` : Doit contenir un booléen, si true les noeud peuvent utiliser une méthode __toString() qui facilite le debogage.
+* `base_template_class` : Contient sous forme de string le nom de classe à utiliser pour générer les templates. Par défaut Twig_Templates.
+* `autoescape` : Permet d'échapper les balises et autres caratères spécifiques au différents langages utilisés. `false` pour désactiver l'option.
+
+D'autres existe et vous pouvez aisemment les découvrir dans la documentation, ici je n'ai répertorié qe les plus utilisés en général.
 
 Maintenant nous avons tous les outils pour utiliser `Twig` et notre instance de `Environment` contient une méthode `render()`, elle prend en paramètre le nom de votre fichier à afficher, sous forme de string et présent dans le dossier `templates`. Cette méthode doit être précédée de la fonction php `echo` sinon elle ne fera que s'exécuter et parser le document sans afficher quoi que ce soit, même pas une erreur, pensez-y. Voici donc notre fichier index au complet reconfectionné :
 
