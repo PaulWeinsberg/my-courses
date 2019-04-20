@@ -90,7 +90,7 @@ Le second paramètre n'étant pas obligatoire j'ai choisi d'inscrire `false` pou
 
 * `charset` : Doit contenir le nom de l'encodage sous forme de string, par défaut UTF8.
 * `cache` : Doit contenir une chemin sous forme de string vers le dossier contenant les fichiers de cache.
-* `debug` : Doit contenir un booléen, si true les noeud peuvent utiliser une méthode __toString() qui facilite le debogage.
+* `debug` : Doit contenir un booléen, si true les noeud peuvent utiliser une méthode `dump()` qui facilite le debogage (attention une extension est nécessaire nous y reviendrons).
 * `base_template_class` : Contient sous forme de string le nom de classe à utiliser pour générer les templates. Par défaut Twig_Templates.
 * `autoescape` : Permet d'échapper les balises et autres caratères spécifiques au différents langages utilisés. `false` pour désactiver l'option.
 
@@ -280,9 +280,9 @@ En rechargeant la page vous constaterez que Bootstrap à bien était chargé et 
 </body>
 ```
 
-Maintenant vous pouvez naviguer. Bien sûr la page articles n'existe pas et renvoie une erreur 404 comme définie dans notre index.
+Maintenant vous pouvez naviguer. Bien sûr la page articles n'existe pas et renvoie une erreur 404 comme définie dans notre index. Sachez également que ce système de layout peut s'appliquer à plusieurs niveau de hiérarchie. Il est possible par exemple de créer un layout avec sidebar qui hériterait du layout que nous avons créé puis d'utiliser ensuite le layout avec sidebar ce qui est très pratique lorsque l'on veut créer des pages différentes sans pour autant refaire l'ensemble d'un layout. Il est également à savoir que chaque block déclarer dans un layout enfant et dans un parent ne seront pas dupliqués. Le block enfant écrase le block du layout parent. Dernière chose à se sujet il est parfois nécessaire d'utiliser la fonction `include` et il suffit de l'utiliser comme d'habitude mais avec la syntaxe d'insertion de variable soit `{{ inlude './path/to/file' }}`.
 
-#### Utiliser une boucle
+#### Les boucles
 
 Pour la suite de ce cours nous allons simuler un tableau d'objet retourné par une base de données. Pour cela nous allons créer une classe `Person` et instancier 5 objet à partir de celle-ci. Rien de bien compliqué ici, ces instances contiendrons uniquement un prénom, un nom et une date comme propriétés. Enfin nous mettrons ces objets dans un tableau associatif `$persons` que nous passerons en paramètre de la méthode `render()`. Enfin nous utiliserons une boucle dans notre template `home` pour afficher sous forme de tableau les nom et prénom contenu dans chacun des objets.
 
@@ -365,6 +365,10 @@ Maintenant notre template `home` peut accéder au tableau d'instances que nous v
 
 A l'intérieur d'une bloucle vous pouvez utiliser des variable avec la syntaxe `{{ maVariable }}` qui sont relatives aux boucles. Par exemple `loop.index` renvoie l'itération en cours de la boucle et commence par 1, c'est celle dont nous nous sommes servi pour afficher les numéro de notre liste. Il est possible d'utiliser `loop.index0` qui dans ce cas commence à 0. D'autres, très pratiques sont disponibles dans la documentation.
 
+#### Autres tags
+
+Il existe unn grand nombre d'autrestags constamment utilisés comme `if` cependant je vous laisse rechercher dans la documentation car vous les présenter un à un reviendrait à refaire une documentation qui est déjà bien complète et bien faite, l'objectif ici étant de comprendre les grands principes et ainsi vous donner un maximum d'autonomie en un minimum de temps.
+
 ### Utiliser les filtres
 
 Les filtres permettent de modifier le contenu d'une variable simplement. Ils ressemble au pipes que l'on utilise avec Angular dans leur syntaxe et leur utilisation. Un filtre s'utilise dans l'insertion d'une variable donc entre les crochets et doivent être précédés par un `|` ce qui donne la syntaxe suivante `{{ maVariable | monFiltre }}`. Les filtres peuvent être particulièrement utile dans de nombreux cas par exemple nous pouvons facilement modifier la date que nous avons créé dans nos instances de `Person` avec le filtre date :
@@ -384,3 +388,141 @@ En avançant avec Twig vous allez vous rendre rapidement compte que vous n'avez 
 * `addGlobal` : Permet d'ajouter une variable global.
 * `addExtension` : Permet d'ajouter une extension.
 
+Ce que je vous propose pour comprendre un peu ce principe c'est d'inclure une fonction puis un filtre permettant tout deux d'afficher du texte au format Markdown. Dans un premier temps ajoutons le package `Michelf/php-markdown` de composer à notre projet :
+
+`composer require michelf/php-markdown`
+
+Pour tranformer du texte markdown en html la classe `Markdown` du namespace `Michelf\` contient une méthode `defaultTransform()` et prend en paramètre la valeur à transformer avant de la retourner au bon format.
+
+Mais avant de nous servir de cette méthode nous devons créer une instance de la classe `\Twig\TwigFunction()` elle prend en paramètre le nom au format string de la fonction à appeler dans nos templates Twig et en second paramètre la fonction à réaliser. Voici comment nous pourrions utiliser ce principe, dans le fichier `index.php` :
+
+```php
+use Michelf\Markdown;
+$markdown = new \Twig\TwigFunction('markdown', function($value) {
+    return Markdown::defaultTransform($value);
+});
+```
+
+Nous devons ensuite utiliser la méthode `addFunction` de notre objet `$twig` et lui passer l'instance de `TwigFunction` que nous venons de créer :
+
+```php
+$twig->addFunction($markdown);
+```
+
+Pour utiliser notre fonction au sein de notre template on utilisera la syntaxe suivante :
+
+```html
+<p>{{ markdown('# Salut') }}</p>
+```
+
+Cependant nous avons un problème `Salut` devrait s'afficher en `<h1>` mais twig échape le html... Heureusement nous avons une solution toute prêt il suffit de préciser dans les paramètres de notre function et en 3ième position le tableau suivant qui permettra de préciser à twig que ce que retourne notre fonction est sécurisé :
+
+```php
+use Michelf\Markdown;
+$markdown = new \Twig\TwigFunction('markdown', function($value) {
+    return Markdown::defaultTransform($value);
+}, ['is_safe' => ['html']]);
+```
+
+Et voilà `Salut` s'affiche maintenant en appliquant le format Markdown à notre html. C'est pas beau ça ? Pour faire la même chose mais avec un filtre il suffit de changer 3 choses dans notre code :
+
+* L'instance TwigFunction par TwigFilter
+* addFunction par addFilter
+* Et enfin modifier la syntaxe du template Twig.
+
+Ce qui nous donne ceci dans le fichier `index.php` :
+
+```php
+use Michelf\Markdown;
+$markdown = new \Twig\TwigFilter('markdown', function($value) {
+    return Markdown::defaultTransform($value);
+}, ['is_safe' => ['html']]);
+
+$twig->addFilter($markdown);
+```
+
+Et dans notre template `home` :
+
+```html
+<p>{{ '# Salut' | markdown }}</p>
+```
+
+Et voilà ! Rien de plus facile n'est-ce pas ?
+
+### Les extensions
+
+Les extensions peuvent être soit créer soit importer depuis la librairie de twig ou une autre. Quoi qu'il en soit elle doivent être inclues dans l'objet `$twig` pour pouvoir être fonctionnelle. 
+
+#### Les extensions natives de Twig
+
+Comme pour les filtres et les fonctions on utilise la syntaxe `addExtension()` pour ajouter une extension. D'ailleur nous avions vu dans le début du cours qu'il était possible d'ajouter une fonction `dump()` pour faciliter le débogage et bien celle-ci nécessite une extension. Je vous propose de l'implémenter dans notre fichier index :
+
+```php
+$twig->addExtension(new \Twig\Extension\DebugExtension);
+```
+
+N'oubliez pas de mettre `'debug'` sur `true` dans les options de `\Twig\Environment` :
+
+```php
+$twig = new \Twig\Environment($loader, [
+    'cache' => false,
+    'debug' => true,
+]);
+```
+
+Maintenant testons notre fonction `dump()` directement sur notre tableau d'objet personne et dans notre template `home` :
+
+```html
+<pre>
+{{ dump(persons) }}
+</pre>
+```
+
+Les balise `<pre>` ne sont pas obligatoires mais permettent un meilleures affichage. Rechargez votre page et vous pourrez constater que votre tableau s'affiche exactement comme un `var_dump()`. Vous trouverez d'autre extensions intéressantes directement dans la documentation de Twig prévue à cet effet.
+
+#### Créer une extension
+
+Un extension va simplement nous permettre de créer et insérrer à l'interieur de celle-ci nos filtres, fonction et autres spécifités de Twig. Ce qui est très pratique car cela évite de répéter `addFunction()` ou autre méthode d'insertion à de nombreuse reprises. Je vous propose d'insérer notre filtre et notre fonction Markdown à l'intérieur d'une extension que nous allons créer.
+
+Pour commencer in faut savoir que les extensions de Twig doivent hériter de la classe `\Twig\Extension\AbstractExtension` je vous invite d'ailleur à aller voir ce fichier dans le path de votre votre dossier racine suivant : `./vendor/Twig/src/Extension` vous comprendrez mieux le fonctionnement de cette classe abstraite.
+
+Nous pouvons constater que les méthodes de la classe doivent retourner un tableau. Ce tableau doit être composé d'instaces des classes pour créer nos éléments. Par exemple la méthodes `getFunctions()` retourne un tableau d'instances de `\Twig\TwigFunction`. Il nous suffit d'inclure les instances que nous avons réalisées dans notre index. En premier lieu créez un dossier `extension` à la racin de votre site puis ajoutez un fichier `myextension.php` Nous utiliserons un namespace pour notre nouvelle classe que j'ai choisi de nommer `Custom\Extension`. Notre classe se nommera simplement `MyExtension`. Voici ce à quoi elle pourrait ressembler :
+
+```php
+<?php
+namespace Custom\Extension;
+
+class MyExtension extends \Twig\Extension\AbstractExtension {
+
+	public function getFilters() {
+		return [
+			new \Twig\TwigFilter('markdown', function($value) {
+				return \Michelf\Markdown::defaultTransform($value);
+			}, ['is_safe' => ['html']])
+		];
+	}
+
+	public function getFunctions() {
+		return [
+			new \Twig\TwigFunction('markdown', function($value) {
+				return \Michelf\Markdown::defaultTransform($value);
+			}, ['is_safe' => ['html']])
+		];
+	}
+
+}
+?>
+```
+
+Voilà maintenant il nous faut supprimer le code inutile de la partie index c'est à dire celui relié au filtre et à la fonciton déplacés. Puis d'ajouter les lignes suivantes :
+
+```php
+require './extension/myextension.php';
+// du code ..........
+$twig->addExtension(new \Custom\Extension\MyExtension());
+```
+
+Maintenant utiliser le filtre et la fonction markdown dans votre template. Vous constaterez que tous fonctionne comme auparavant excepté que votre code est beaucoup mieux organisé.
+
+
+### Les macros
