@@ -220,9 +220,9 @@ Vous pouvez également utiliser des méthodes dans votre template Twig. Pour cel
 Puis dans notre template à la place de `page.title` utilisez `page.getTitle` et vous pourez constater que l'ensemble fonctionne à l'identique.
 
 
-### Layout et système de block
+### Tags et système de block
 
-Twig permet de répondre à une problèmatique courante lors de la confection d'un site web. Le layout. En effet personne n'a envie de se répeter à chaque fois que l'on veut créer une page et y inclure le header le footer etc etc. Bien sûr vous connaissez déjà la solution avec PHP en utilisant `include` mais avec Twig la syntaxe est légèrement différente et nous allons utiliser un système de block.
+Twig permet de répondre à une problèmatique courante lors de la confection d'un site web. Le layout. En effet personne n'a envie de se répeter à chaque fois que l'on veut créer une page et y inclure le header le footer etc etc. Bien sûr vous connaissez déjà la solution avec PHP en utilisant `include` mais avec Twig la syntaxe est légèrement différente et nous allons utiliser un système de block. L'ensemble de ce que nous verrons dans cette partie font parties de la famille des `tags` Twig et prennent la syntaxe suivante `{% tag %}`.
 
 #### Créer un layout
 
@@ -282,9 +282,105 @@ En rechargeant la page vous constaterez que Bootstrap à bien était chargé et 
 
 Maintenant vous pouvez naviguer. Bien sûr la page articles n'existe pas et renvoie une erreur 404 comme définie dans notre index.
 
-### Utiliser une boucle
+#### Utiliser une boucle
+
+Pour la suite de ce cours nous allons simuler un tableau d'objet retourné par une base de données. Pour cela nous allons créer une classe `Person` et instancier 5 objet à partir de celle-ci. Rien de bien compliqué ici, ces instances contiendrons uniquement un prénom, un nom et une date comme propriétés. Enfin nous mettrons ces objets dans un tableau associatif `$persons` que nous passerons en paramètre de la méthode `render()`. Enfin nous utiliserons une boucle dans notre template `home` pour afficher sous forme de tableau les nom et prénom contenu dans chacun des objets.
+
+A la racine de notre site web nous allons créer un fichier persons.php qui sera chargé de retourner justement notre tableau, il contiendra également la classe `Person` et la création de chacune des instances :
+
+```php
+<?php
+
+class Person {
+
+	public $_firstname;
+	public $_lastname;
+	public $_date;
+
+	function __construct($firstname,$lastname) {
+		$this->_firstname = $firstname;
+		$this->_lastname = $lastname;
+		$this->_date = date('m-d-Y H:i:s',1494511938);
+	}
+}
+
+$jean = new Person('Jean','Rivière');
+$marine = new Person('Marine','Gauduchon');
+$marc = new Person('Marc','Bertaud');
+$jeanLuc = new Person('Jean-luc','Monetti');
+$paul = new Person('Paul','Dujardin');
+
+$persons = [$jean,$marine,$marc,$jeanLuc,$paul];
+
+?>
+```
+
+Ensuite nous incluons justement cette classe dans notre fichier `index.php` :
+
+```php
+include './persons.php';
+```
+Puis nous passons le tableau `$persons` en paramètre de `render()` :
+
+```php
+    case 'home':
+        echo $twig->render('home.html.twig',[
+            'page' => $page,
+            'persons' => $persons
+            ]);
+        break;
+```
+
+Maintenant notre template `home` peut accéder au tableau d'instances que nous venons de créer, nous allons créer un tableau HTML avec Bootstrap et plutôt que de créer une nouvelle ligne `tr` et de ce répeter nous allons utiliser une boucle avec `Twig` dont la syntaxe est `{% for item of array %}``{% endfor %}` :
+
+```html
+{% extends 'layout.html.twig' %}
+{% block content %}
+	<h1>Bienvenue sur la page {{ page.getTitle }}</h1>
+	<p>{{ page.paraph }}</p>
+	<div class="mt-2">
+		<table class="table border">
+			<thead class="thead-light">
+				<tr>
+					<th>N°</th>
+					<th>Prénom</th>
+					<th>Nom</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for person in persons %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ person._firstname }}</td>
+					<td>{{ person._lastname }}</td>
+					<td>{{ person._date }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>	
+	</div>
+{% endblock %}
+```
+
+A l'intérieur d'une bloucle vous pouvez utiliser des variable avec la syntaxe `{{ maVariable }}` qui sont relatives aux boucles. Par exemple `loop.index` renvoie l'itération en cours de la boucle et commence par 1, c'est celle dont nous nous sommes servi pour afficher les numéro de notre liste. Il est possible d'utiliser `loop.index0` qui dans ce cas commence à 0. D'autres, très pratiques sont disponibles dans la documentation.
 
 ### Utiliser les filtres
 
+Les filtres permettent de modifier le contenu d'une variable simplement. Ils ressemble au pipes que l'on utilise avec Angular dans leur syntaxe et leur utilisation. Un filtre s'utilise dans l'insertion d'une variable donc entre les crochets et doivent être précédés par un `|` ce qui donne la syntaxe suivante `{{ maVariable | monFiltre }}`. Les filtres peuvent être particulièrement utile dans de nombreux cas par exemple nous pouvons facilement modifier la date que nous avons créé dans nos instances de `Person` avec le filtre date :
+
+```html
+<td>{{ person._date | date('\\l\\e d-m-Y \\à H:i')}}</td>
+```
+
+Nous pouvons constater que notre date à maintenant une valeur différente mais est bien basée sur la date que nous avons renseignée dans notre propriété `$_date`. Nous pouvons utiliser énormément de filtres comme par exemple `upper` et `lower` qui respectivement mettent en majuscules ou minuscules les caractères des string sur lesquelles ils s'appliquent. D'autre sont beaucoup plus spécifique comme `nl2br` qui permet de transformer les `\n` d'une string en `<br>` et permettre ainsi le retour à la ligne en HTML.
+
 ### Ajouter des fonctions, filtres et autres
+
+En avançant avec Twig vous allez vous rendre rapidement compte que vous n'avez pas toutes les fonctions ou filtres que vous souhaiteriez avoir? Mais pas d'inquiétude, les développeur on pensez à vous et nous permettent avec des méthodes prévues pour cela d'ajouter nos propres outils à twig. Ces méthodes s'utilisent sur l'instance de `\Twig\Environment` et donc dans notre cas sur l'objet `$twig`, voici les principales à connaitre :
+
+* `addFunction` : Permet d'ajouter une fonction.
+* `addFilter` : Permet d'ajouter un filtre.
+* `addGlobal` : Permet d'ajouter une variable global.
+* `addExtension` : Permet d'ajouter une extension.
 
