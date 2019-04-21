@@ -526,3 +526,48 @@ Maintenant utiliser le filtre et la fonction markdown dans votre template. Vous 
 
 
 ### Les macros
+
+Les macros permettent de générer facilement du code répétitif comme cela peut être le cas pour les formulaires par exemple. Elles fonctionnent de façon très similaire à une fonction car elles peuvent prendre des paramètre en compte et changer de comportement en fonction de ceux ci.
+
+Pour illustrer leur fonctionnement nous allons créer une macro permettant de générer un formulaire de type Bootstrap et plus précisement ces différents inputs. Commençons donc à créer un dossier `macros` dans notre dossier `templates`, celui contiendra un fichier que nous nommerons `form.html.twig`. Dans ce fichier npous allons utiliser le tag `macro` et générer notre première macro. Celle-ci s'appelera `input` et prendra en paramètre le type, la valeur des attributs name, id ainsi que le nom du label. Nous ajouterons une condition qui dira *Si label est défini alors j'affiche une balise label qui contiendra la valeur transmise et l'id de l'input*.
+
+Voilà ce que donne notre fichier :
+
+```html
+{% macro input(type,name,id,label) %}
+<div class="form-group">
+	{% if label %}
+	<label for="{{ id }}">{{ label }}</label>
+	{% endif %}
+	<input class="form-control" type="{{ type | default('text') }}" name="{{ name }}" id="{{ id }}">
+</div>
+{% endmacro %}
+```
+
+Notre macro est prête à l'emploi, il faut maintenant l'importer dans le template `home`. Pour cela il existe le tag `import` qui fonctionne comme ceci :
+
+```html
+{% import "./macros/form.html.twig" as form %}
+```
+
+Attention au chemin il est toujours relatif au dossier template et la sortie via deux point `../` ne fonctionnera pas. 
+
+Créons donc notre formulaire en bas de page, entre une balise `form` bien entendu. Ce formualire comportera un prénom, un nom ainsi qu'un email :
+
+```html
+	<div class="row">
+		<div class="col-8 mx-auto">
+			<form>
+				{{ form.input('text','firstname','firstname', 'Prénom') }}
+				{{ form.input('text','lastname','lastname', 'Nom') }}
+				{{ form.input('email','email','email', 'Adresse email') }}
+			</form>
+		</div>
+	</div>
+```
+
+En seulement quelques lignes vous avez créez un formaire =).
+
+## Conslusion
+
+Nous avons fais le tour des grands principes du moteur ed templates Twig, je vous laisse découvrir le reste maintenant que vous avez une idée assez précise de son fonctionnement général. Ce que vous pouvez remarquer avant de quitter ce chapitre est de passer au suivant c'est que nos templates HTML sont particulièrement lisibles et c'est je crois l'un des plus gros avantage de Twig mise à part sa facilité d'utilisation.
