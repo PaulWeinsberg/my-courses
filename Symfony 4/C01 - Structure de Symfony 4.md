@@ -1,4 +1,4 @@
-# CHAPITRE II : COMPRENDRE LA STRUCTURE DE SYMFONY 4
+# CHAPITRE I : COMPRENDRE LA STRUCTURE DE SYMFONY 4
 
 Dans ce chapitre nous allons voir comment se compose le dossier racine de Symfony 4. Il est important de comprendre ces notions car elles vous permettrons de mieux intéragir avec le frameworks et rapidement comprendre comment l'utiliser et éviter des problèmatiques liées à une mauvaise interprétation de son fonctionnement structurel.
 
@@ -26,7 +26,7 @@ Ce shéma mémotehcnique est particulièrement simplifié mais il permet d'en l'
 
 Maintenant voyons comment se structure Symfony juste après une installation sur notre machine.
 
-#### Le dossier racine
+### Le dossier racine
 
 Plutôt qu'une longue explication rien de vaut un petit shéma que je vous propose de voir sous forme de tableau descriptif.
 

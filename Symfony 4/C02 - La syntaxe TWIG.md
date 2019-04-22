@@ -1,4 +1,4 @@
-# CHAPITRE III : La syntaxe TWIG
+# CHAPITRE II : La syntaxe TWIG
 
 Dans ce chapitre nous allons voir comment utiliser la syntaxe `TWIG`. Cette syntaxe n'est vraiment pas complexe à utiliser et va nous permettre de faciliter l'écriture et la lecture des templates HTML/PHP plus classiques.
 

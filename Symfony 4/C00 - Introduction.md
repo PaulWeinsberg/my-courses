@@ -1,4 +1,4 @@
-# CHAPITRE I : INTRODUCTION
+# INTRODUCTION
 
 Dans ce chapitre je vous propose de voir globalement ce que peut proposer l'utilisation d'un framework comme Symfony mais également de revenir sur son histoire. Nous ne rentrerons pas dans les détails car cela reviendrait à commencer le cours dès cette petite introduction. Nous verrons également comment installer Symfony sur un serveur Linux. Notez qu'avec le PowerShell de Windows vous avez la possibilité d'installer une version de Debian et ainsi ne pas avoir besoin de switcher sur Linux. Sinon vous pouvez également utiliser un logiciel comme WAMP qui pourra faire office de serveur HTTP Apache/MySQL et PHP sur votre bécane.
 
@@ -9,6 +9,10 @@ Symfony est plus qu'un simple fraamework c'est le framework le plus utiliser dan
 #### L'histoire de Symfony
 
 Symfony est donc un framework basé sur le langage PHP et créé par une boite nommée **SensioLabs** en 2005 et pour ces propres besoin. Le framework est ensuite rendu public via l'Open Source et beaucoup de développeur y contribuent régulièrement. En quelques chiffres le framework Symfony à passé la barre du milliard de téléchargements. Petite informations pour votre égo `SensioLabs` est une boite française... Cocorico.
+
+#### Le projet
+
+Plutôt que de naviguer à l'aveugle et sans objectif réel nous allons créer un petit site d'agence immobilière avec le framework ce qui nous permettra de nous faire la main en conditions réelles.
 
 ## Installation
 
@@ -100,12 +104,17 @@ Un fois installer il vous suffira d'exécuter la commande suivante pour lancer v
 
 `php ./bin/console server:run`
 
-Symfony met à disposition une petite librairie d'outils depuis le dossier `/bin` qui peuvent etre très utiles dans de nombreux cas et vont par la suite grandement nous simplifier la vie au cours du développement.
+Symfony met à disposition une petite librairie d'outils depuis le dossier `/bin` qui peuvent etre très utiles dans de nombreux cas et vont par la suite grandement nous simplifier la vie au cours du développement. Si vous souhaitez en savoir plus sur l'ensemble des commandes disponible depuis la console il suffit de modifier légérement la syntaxe de l'instrcution précédent en retirant `server:run`.
 
 Rendez-vous dans votre navigateur et taper l'adresse suivante `localhost:8000`. Attention à bien saisir le port 8000 et non 80 qui est le port par défaut. Ce serveur peut tourner en même temps qu'un serveur apache sur votre machine ce qui peut être assez pratique.
+
+Il est bon de savoir qu'il est également possible de lancer un serveur très facilement avec les verisons récénetes de PHP, l'instruction est la suivante :
+
+`php -S 127.0.0.1:8000`
+
+Il est possible de spécifier le dossier depuis lequel php doit rooter le serveur avec le flag `-t` s'il n'est pas présent alors le serveur ce lance depuis le dossier en cours d'utilisation.
 
 
 #### Problème de version (autre que 4.X)
 
 Lorsque vous utiliserez ce tutoriel il est fort probable que la version de PHP stable soit au minimum la 7.2 pour Debian si ce n'est pas encore le cas comme pour moi au moment ou j'écris ce paragraph il vous faudra alors installer les dépendances de php7.2. Réinstallez ensuite composer qui installera les dépendances liées au packages de php7.2. En effet si vous utiliser composer avec une version PHP antérieur à la 7.2 alors celui-ci installera automatiquement une version de Symfony antérieure, dans mon cas la 3.4.
-
