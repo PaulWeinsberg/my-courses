@@ -127,3 +127,39 @@ Il ne nous reste plus qu'à modifier notre méthode index retournant une instanc
 		return new Response($this->_twig->render('pages/home.html.twig'));
 	}
 ```
+
+Voilà notre méthode pointe maintenant vers le template que nous venons de créer précédemment, tentez de recharger votre site web et le résultat devrait s'afficher sinon vous avez surement un oubli dans votre code. On peut donc en déduire que notre configuration à automatiquement injecter le service après avoir récupéré les informations présentes dans le fichier `yaml`. Ce qui nous évite d'avoir à préciser le namespace de `Twig` dans notre controleur. 
+
+### L'autowiring
+
+Un peu plus tôt je vous ai parlé du système d'autowiring de Symfony, alors comment fonctionne-t-il et surtout à quoi sert-il ? Et bien pour vous illustrer sont intérêt imaginez vous avoir à injecter le service twig dans tous vos contrôleur et bien ce serait fastidieux car au final vous allez vous répéter sans pour autant faire de modification intéressante ou nécessaires.
+
+Pour voir la liste des services disponibles avec l'autowiring il suffit de taper la commande suivante dans votre terminal :
+
+`php bin/console debug:autowiring`
+
+On peut voir que Twig est disponible et à partir de là nous pouvons donc l'utiliser directement sans passer par un service. C'est du coup la méthode que nous allons utiliser. rendez-vous dans votre fichier des services `services.yaml` et supprimez les lignes que nous venons de créer.
+
+Allons maintenant dans le fichier de notre controleur et importons le namespace spécifié dans la console c'est à dire `Twig\Environment` :
+
+```php
+use Twig\Environment;
+```
+
+Enfin pour notre constructeur :
+
+```php
+	public function __construct(Environment $twig) {
+		$this->_twig = $twig;
+	}
+```
+
+Le reste du code est identique, vous pouvez maintenant recharger votre page et constater que cela fonctionne de la même façon. Il existe également une autre syntaxe qui permet de ne pas avoir à utiliser use en haut de notre page :
+
+```php
+	public function __construct(\Twig\Environment $twig) {
+		$this->_twig = $twig;
+	}
+```
+
+De cette façon cela fonctionne également mais retire de la lisibilité. C'est donc à vous de choisir ce que vous préférez utiliser. Dans le prochain chapitre nous ferons essentiellement de la mise en forme pour nos pages, je vous donnerai la majeur parti du code à réaliser.
