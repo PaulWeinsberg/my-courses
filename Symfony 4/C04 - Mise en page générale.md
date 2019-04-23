@@ -108,18 +108,13 @@ Le contrôleur sera pour le moment très similaire à celui de notre page home.
 
 namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
 
-class PropertiesController {
-
-	private $_twig;
-
-	public function __construct(Environment $twig) {
-		$this->_twig = $twig;
-	}
+class PropertiesController extends AbstractController {
 
 	public function index(): Response {
-		return new Response($this->_twig->render('pages/properties.html.twig'));
+		return $this->render('pages/properties.html.twig');
 	}
 
 }
@@ -163,7 +158,7 @@ Comme vous le savez la classe `active` de bootstrap permet de colorer le lien en
 Voici ce que doivent retourner nos controleurs je vous laisse faire le second :
 
 ```php
-return new Response($this->_twig->render('pages/home.html.twig', [
+return $this->render('pages/home.html.twig', [
 	'current_page' => 'home'
 ]));
 ```

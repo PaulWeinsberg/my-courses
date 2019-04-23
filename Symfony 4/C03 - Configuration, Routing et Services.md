@@ -140,26 +140,23 @@ Pour voir la liste des services disponibles avec l'autowiring il suffit de taper
 
 On peut voir que Twig est disponible et à partir de là nous pouvons donc l'utiliser directement sans passer par un service. C'est du coup la méthode que nous allons utiliser. rendez-vous dans votre fichier des services `services.yaml` et supprimez les lignes que nous venons de créer.
 
-Allons maintenant dans le fichier de notre controleur et importons le namespace spécifié dans la console c'est à dire `Twig\Environment` :
+Ensuite il nous faut importer la classe `AbstractController` depuis `Symfony\Bundle\FrameworkBundle\Controller` vous pouvais d'ailleurs allez dans le dossier du fichier correspondant avec votre IDE et constater comment fonctionne la classe en question.
 
 ```php
-use Twig\Environment;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// Du code.....
+class HomeController extends AbstractController {
+	// Du code....
+}
+
 ```
 
-Enfin pour notre constructeur :
+Maintenant nous disposons de l'ensemble des namespaces des services directement accessibles depuis la variable `$this` car PHP génère l'ensemble des méthodes des différents services directement dans notre classe héritant de `AbstractController`. Ainsi nous pouvons utiliser twig simplement avec cette variable. Il est également à savoir que l'utilisation de cette variable génère automatiquement une instance de `Response` pour la méthode `render()`.
 
 ```php
-	public function __construct(Environment $twig) {
-		$this->_twig = $twig;
+	public function index(): Response {
+		return $this->render('pages/home.html.twig');
 	}
 ```
 
-Le reste du code est identique, vous pouvez maintenant recharger votre page et constater que cela fonctionne de la même façon. Il existe également une autre syntaxe qui permet de ne pas avoir à utiliser use en haut de notre page :
-
-```php
-	public function __construct(\Twig\Environment $twig) {
-		$this->_twig = $twig;
-	}
-```
-
-De cette façon cela fonctionne également mais retire de la lisibilité. C'est donc à vous de choisir ce que vous préférez utiliser. Dans le prochain chapitre nous ferons essentiellement de la mise en forme pour nos pages, je vous donnerai la majeur parti du code à réaliser.
+Voilà un code bien plus légé et qui utilise les outils mis en place par Symfony. Je vous recommande d'appliquer ce principe à tous vos controleurs.

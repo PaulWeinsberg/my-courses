@@ -104,14 +104,15 @@ Connectez-vous à votre base de données MySQL avec votre console et faites un c
 +-------------+--------------+------+-----+---------+----------------+
 ```
 
-Comme nous pouvons le voir il nous manque certaine informations que nous souhaitions renseigner plus tôt. Notamment les valeurs par défaut. Pour cela nous allons modifier les annotations du fichier `src/Entity/PropertyEntity.php`. On peut y ajouter des options au format JSON ce qui nous donnera ceci pour solde et je vous laisse faire les deux autres :
+Comme nous pouvons le voir il nous manque certaine informations que nous souhaitions renseigner plus tôt. Notamment les valeurs par défaut. Pour cela nous allons modifier les annotations du fichier `src/Entity/PropertyEntity.php`. On peut y ajouter des options au format JSON ce qui nous donnera ceci pour la colonne `sold` et il ne faut pas non plus oublier d'assigner la valeur pas défaut à la propriété elle-même. Je vous laisse faire les deux autres :
 
 ```php
     /**
      * @ORM\Column(type="boolean", options={"default":0})
      */
-		private $sold;
+		private $sold = false;
 ```
+*0 en SQL === false*
 
 Nous pouvons maintenant mettre à jour notre base de données. Dans un premier temps on créer le fichier de migration avec la commande `make:migration`, ensuite on vérifie le fichier généré pour éviter les erreurs puis on applique le contenu de la fonciton `up()` avec la commande `doctrine:migration:migrate`. Voilà notre base de données est maintenant comme nous le désirions à l'exeption des types non pris en compte avec Symfony.
 
