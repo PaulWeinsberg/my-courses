@@ -95,9 +95,9 @@ Cette méthode va nous permettre de récupérer l'ensemble de nos biens présent
 
 Cette fois ci c'est un tableau d'objet qui nous est renvoyé. On peut d'ailleurs voir notre bien à l'index 0.
 
-#### Les méthode `findBy()` et `findByOne()`
+#### Les méthode `findBy()` et `findOneBy()`
 
-Chacun des deux méthodes prend en paramètre un tableau associatif dont la clé est égale au nom d'une colonne et sa valeur à la valeur à rechercher. La différence entre ces deux méthodes se situe sur le nombre et la forme des objets renvoyés. `findByOne()` ne renvoie que la première occurence alors que `findBy()` renvoie un tableau associatif de l'ensemble des occurences existentes. Par exemple si nous voulons afficher les biens sur bordeaux :
+Chacun des deux méthodes prend en paramètre un tableau associatif dont la clé est égale au nom d'une colonne et sa valeur à la valeur à rechercher. La différence entre ces deux méthodes se situe sur le nombre et la forme des objets renvoyés. `findOneBy()` ne renvoie que la première occurence alors que `findBy()` renvoie un tableau associatif de l'ensemble des occurences existentes. Par exemple si nous voulons afficher les biens sur bordeaux :
 
 ```php
 	public function index(): Response {
@@ -141,14 +141,24 @@ Ce schéma est mis en exemple dans le code de cotre `PropertyRepository` en comm
 
 #### Des requêtes plus complexes
 
-Il est également possible de créer des requêtes plus complexes comme vous pouvez en avoir besoin je vous laisse lire la documentation en ce sens avec DQL (Doctrine Wuery Language) à l'adresse suivante :
+Il est également possible de créer des requêtes plus complexes comme vous pouvez en avoir besoin je vous laisse lire la documentation en ce sens avec DQL (Doctrine Wuery Language) à l'adresse suivante. Si vous maîtrisez déjà SQL vous n'aurez aucun problème à l'implémenter =) :
 
 [DQL Syntaxe](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html)
 
 ## Les échanges BDD - Fichiers
 
+Je souhaite vous parler un peu plus du système que propose Symfony pour gérer la base de données afin de mieux le comprendre. Dans cette fin de chapitre j'aborderai quelques notions à savoir pour mieux travailler avec le framework.
+
 #### La priorité aux fichiers
 
-Le
+Avec Symfony, les fichiers détiennent la vérité. Qu'est-ce que je veux dire par cette phrase ? Eh bien je veux que vous reteniez facilement l'informations suivante. Comme nous avons pu le voir Symfony fonctionne en orienté objet et ce base sur un système de classe définit par nos fichiers. Ces fichiers ont toujours la priorités sur les informations contenus dans la base de données. En effet si votre base de données contient une colonne inconnu par votre entité correspondant à la table alors vous ne pourrait en aucun cas vous en servire car, si la création de l'instance ne soulève pas une exception, elle ne sera de toute façon pas assigné à votr objet sur lequel vous pourrez par la suite travailler.
 
 #### Mise à jour avec `flush()`
+
+`flush()` est une fonction très intéressante car elle n'envoie pas simplement les modifications que vous effectuez sur votre objet dans la base de données associée. Avant d'effectuer quelconque requête elle compare les informations de votre base de données avec l'objet, si des modifications ont étés effectuées sur celui-ci alors l'utilisation de `fluch()` ne fera une requête ne concernant que les champs à modifier, ce qui allègele travail et les temps de réponse de votre SGBDR.
+
+## La documentation
+
+Je met ceci en gros titre mais il s'âgit simplement d'un lien vers la documentation API de doctrine sur le namespace `Doctrine\Common\Persistence`. C'est une très bonne documentation pour avoir des infos rapidement :
+
+[API DOC Doctrine](https://www.doctrine-project.org/api/persistence/1.0/Doctrine/Common/Persistence.html)
