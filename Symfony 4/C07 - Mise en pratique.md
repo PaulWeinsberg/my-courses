@@ -36,17 +36,26 @@ Maintenant que nous avons ces informations et que nous connaissons la syntaxe Tw
 {% extends 'layouts/std-layout.html.twig' %}
 {% block content %}
 	{% for property in properties %}
-		<div class="card" style="width: 18rem">
-			<img src="https://place-hold.it/400x300" alt="Image représentant le bien" class="card-img-top">
-			<div class="card-body">
-				<h5 class="card-title">{{ property.title }}</h5>
-				<p class="card-text">{{ property.description }}</p>
-				<p class="text-primary" style="font-size: 1.5rem">{{ property.price | number_format(0,'.','.') ~ ' €'}}</p>
+		{% if loop.index0 % 3 == 0 or loop.index0 == 0 %}
+			<div class="row">
+		{% endif %}
+			<div class="col-4">
+				<div class="card" style="width: 18rem">
+					<img src="https://place-hold.it/400x300" alt="Image représentant le bien" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">{{ property.title }}</h5>
+						<p class="card-text">{{ property.description }}</p>
+						<p class="text-primary" style="font-size: 1.5rem">{{ property.price | number_format(0,'.','.') ~ ' €'}}</p>
+						<a href="">En savoir plus</a>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">Publié le : {{ property.createdAt | date('d-m-Y \\à H\\hi') }}</small>
+					</div>
+				</div>
 			</div>
-			<div class="card-footer">
-				<small class="text-muted">Publié le : {{ property.createdAt | date('d-m-Y \\à H\\hi') }}</small>
-			</div>
+		{% if loop.index % 3 == 0 %}
 		</div>
+		{% endif %}
 	{% endfor %}
 {% endblock %}
 ```
@@ -129,7 +138,7 @@ Cette méthode fera donc une requête au choix (ici `findOneBy()` que je trouve 
 Il ne nous reste qu'a créer notre template ! Mains avant ajoutons un bouton pour afficher nos biens sur chacune de nos card Bootstrap. Dans le template des biens listés :
 
 ```html
-<a href="{{ path('properties') ~ '/' ~ property.getSlug ~ '-' ~ property.id }}" class="btn btn-primary float-right">En savoir plus</a>
+<a href="{{ path('property', {'slug':property.getSlug,'id':property.id}) }}" class="btn btn-primary float-right">En savoir plus</a>
 ```
 
 Attention à bien implémenter le tirêt et le slash !
@@ -184,7 +193,7 @@ Ici je vous laisse réellement vous excercer avec Twig car vous avez absolument 
 				    </tr>
 				    <tr>
 				      <td style="width: 250px" class="bg-light border-right text-muted">Type de chauffage</td>
-				      <td>{{ property.heat }}</td>
+				      <td>{{ property.getHeat(true) }}</td>
 				    </tr>
 				    <tr>
 				      <td style="width: 250px" class="bg-light border-right text-muted text-capitalize">Ville</td>
@@ -201,7 +210,7 @@ Ici je vous laisse réellement vous excercer avec Twig car vous avez absolument 
 Pour notre chauffage `heat` je vous propose de modifier directement la méthode `getHeat()`. En effet nous allons créer une méthode qui renvoie par défaut le chauffage sous forme de string. Si elle contient `false` en paramètre alors elle retournera le numéro correspondant :
 
 ```php
-  	public function getHeat(bool $toString = true)
+  	public function getHeat(bool $toString = false)
   	{
   	    $heatType = [
   	        'Électrique',
@@ -214,4 +223,7 @@ Pour notre chauffage `heat` je vous propose de modifier directement la méthode 
   	    }
   	}
 ```
+
+Pourquoi ne pas renvoyer directement la conversion par défaut ? Et bien si nous changeons le comportement par défaut de nos méthodes cela nous générera des erreurs par la suite. En effet Symfony vérifi entre autre le typage des valeur de retour lors de nombreuse actions, comme par exemple la création de formulaire que nous verrons dans le chapitre suivant.
+
 Nous commençons à bien avancer sur notre projet et je vous recommande à ce stade d'initialiser votre projet avec git. Un git ignore est déjà présent donc cela devrait ce faire relativement rapidement. Dans le prochain chapitre nous allons voir comment utiliser les formulaires et commencer à créer différents biens.
