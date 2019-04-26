@@ -605,4 +605,4 @@ Cette syntaxe affiche donc l'ensemble des message quelqu'en soit le type. Sachez
 
 ## Conclusion
 
-Nous venons dans ce chapitre nous avons appris à créer une interface CRUD sans écrire une seule ligne SQL ce qui est un véritable avantage comparativement à un travail sans framework. On comprend d'ailleurs l'utilité de ceux ci car en complément avec Bootstrap nous n'avons même pas rédigé une seule ligne de CSS. Finalement ça à du bon tout ça ! Bien sûr pour un site pro Bootstrap on pourra passer niveau design (pas grid) en revanche Symfony fait extrêmement bien son travail et nous facilite grandement la vie une fois maîtrisé. 
+Dans ce chapitre nous avons appris à créer une interface CRUD sans écrire une seule ligne SQL ce qui est un véritable avantage comparativement à un travail sans framework. On comprend d'ailleurs l'utilité de ceux-ci car en complément avec Bootstrap nous n'avons même pas rédigé une seule ligne de CSS. Finalement ça à du bon tout ça ! Bien sûr pour un site pro Bootstrap on pourra passer niveau design (pas grid) en revanche Symfony fait extrêmement bien son travail et nous facilite grandement la vie une fois maîtrisé. 
