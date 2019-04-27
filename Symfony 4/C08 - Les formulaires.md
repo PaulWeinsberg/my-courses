@@ -261,6 +261,8 @@ Voici par exemple ce que nous pourrions faire :
 {% endblock %}
 ```
 
+Sachez également que `form_row()` peut prendre différents paramètres optionnels par exemple pourdéfinir le label précisemment, ajouter des attributs etc.
+
 Ici j'ai volontairement choisi de ne pas afficher la valeur du champ `created_at` cependant on peut constater que Symfony l'ajoute automatiquement. Pour désactiver ce comportement nous allons devoir modifier le formulaire qui à été automatiquement généré dans la classe `PropertyType`.
 
 ### Modifier le comportement du formulaire
