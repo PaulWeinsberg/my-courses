@@ -44,7 +44,7 @@ Maintenant que nous avons ces informations et que nous connaissons la syntaxe Tw
 					<img src="https://place-hold.it/400x300" alt="Image représentant le bien" class="card-img-top">
 					<div class="card-body">
 						<h5 class="card-title">{{ property.title }}</h5>
-						<p class="card-text">{{ property.description }}</p>
+						<p class="card-text">{{ property.description | slice(0,75) ~ '...' }}</p>
 						<p class="text-primary" style="font-size: 1.5rem">{{ property.price | number_format(0,'.','.') ~ ' €'}}</p>
 						<a href="">En savoir plus</a>
 					</div>
