@@ -39,7 +39,7 @@ Avant de commencer à voir les foncitionnalités que propose SASS nous allons te
 
 ### Installation du projet
 
-Vous trouverez dans le lien repository Github du cours un dossier `project` celui contient la structure de notre projet qui se présente comme suit :
+Vous trouverez dans le lien repository Github du cours un dossier zip `project.zip` celui contient la structure de notre projet qui se présente comme suit :
 
 ```
 project
